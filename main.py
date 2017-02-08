@@ -1,7 +1,7 @@
 import pickle
 import random
 
-from helpers import fileHelper
+from helpers import inputHelper
 
 
 # TODO Select next word based on number of occurances rather than random
@@ -15,14 +15,14 @@ def nextWord(current, prev = None):
         return "the"
 
 
-lexicon = fileHelper.selectFile("texts", "lex", "rb")
+lexicon = inputHelper.selectFile("texts", "lex", "rb")
 successors, successorsFromPairs = pickle.load(lexicon)
 lexicon.close()
 
 speech = ""
 
 while speech != "quit":
-    speech = input("> ")
+    speech = inputHelper.getString("> ")
     # noinspection PyRedeclaration
     currentWord = random.choice(speech.split())
     response = [currentWord]

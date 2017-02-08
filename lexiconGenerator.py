@@ -1,9 +1,9 @@
 import pickle
 from collections import defaultdict
 
-from helpers import fileHelper
+from helpers import inputHelper
 
-textFile = fileHelper.selectFile("texts", "txt")
+textFile = inputHelper.selectFile("texts", "txt")
 text = []
 for line in textFile:
     for word in line.split():
