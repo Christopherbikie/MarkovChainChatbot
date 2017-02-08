@@ -1,6 +1,7 @@
 import pickle
 from collections import defaultdict
 
+import state
 from helpers import inputHelper
 
 textFile = inputHelper.selectFile("texts", "txt")
@@ -10,14 +11,15 @@ for line in textFile:
         text.append(word)
 textFile.close()
 
-successors = defaultdict(list)
+# current (str) -> state
+chainOrder1 = defaultdict(state.State)
 for i in range(len(text) - 1):
-    successors[text[i].lower()].append(text[i + 1])
+    chainOrder1[text[i].lower()].addTransition(text[i + 1])
 
-successorsFromPairs = defaultdict(list)
+chainOrder2 = defaultdict(state.State)
 for i in range(len(text) - 2):
-    successorsFromPairs[(text[i].lower(), text[i + 1].lower())].append(text[i + 2])
+    chainOrder2[(text[i].lower(), text[i + 1].lower())].addTransition(text[i + 2])
 
 outFile = open(textFile.name[:-4] + ".lex", "wb")
-pickle.dump((successors, successorsFromPairs), outFile, 2)
+pickle.dump((chainOrder1, chainOrder2), outFile, 2)
 outFile.close()

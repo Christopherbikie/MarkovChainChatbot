@@ -4,19 +4,18 @@ import random
 from helpers import inputHelper
 
 
-# TODO Select next word based on number of occurances rather than random
 def nextWord(current, prev = None):
     current = current.lower()
-    if prev is not None and (prev.lower(), current) in successorsFromPairs:
-        return random.choice(successorsFromPairs[(prev.lower(), current)])
-    elif current in successors:
-        return random.choice(successors[current])
+    if prev is not None and (prev.lower(), current) in chainOrder2:
+        return chainOrder2[(prev.lower(), current)].next()
+    elif current in chainOrder1:
+        return chainOrder1[current].next()
     else:
         return "the"
 
 
 lexicon = inputHelper.selectFile("texts", "lex", "rb")
-successors, successorsFromPairs = pickle.load(lexicon)
+chainOrder1, chainOrder2 = pickle.load(lexicon)
 lexicon.close()
 
 speech = ""
