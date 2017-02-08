@@ -6,8 +6,9 @@ from helpers import fileHelper
 
 # TODO Select next word based on number of occurances rather than random
 def nextWord(current, prev = None):
-    if current is not None and (prev, current) in successorsFromPairs:
-        return random.choice(successorsFromPairs[(prev, current)])
+    current = current.lower()
+    if prev is not None and (prev.lower(), current) in successorsFromPairs:
+        return random.choice(successorsFromPairs[(prev.lower(), current)])
     elif current in successors:
         return random.choice(successors[current])
     else:
