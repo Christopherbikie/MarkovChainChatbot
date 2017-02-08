@@ -4,15 +4,18 @@ import random
 from helpers import fileHelper
 
 
-def nextWord(a):
-    if a in successorList:
-        return random.choice(successorList[a])
+# TODO Select next word based on number of occurances rather than random
+def nextWord(current, prev = None):
+    if current is not None and (prev, current) in successorsFromPairs:
+        return random.choice(successorsFromPairs[(prev, current)])
+    elif current in successors:
+        return random.choice(successors[current])
     else:
         return "the"
 
 
 lexicon = fileHelper.selectFile("texts", "lex", "rb")
-successorList = pickle.load(lexicon)
+successors, successorsFromPairs = pickle.load(lexicon)
 lexicon.close()
 
 speech = ""
@@ -21,13 +24,16 @@ while speech != "quit":
     speech = input("> ")
     # noinspection PyRedeclaration
     currentWord = random.choice(speech.split())
-    response = currentWord
+    response = [currentWord]
 
     while True:
-        newWord = nextWord(currentWord)
-        response += " " + newWord
+        if len(response) > 1:
+            newWord = nextWord(currentWord, response[-2])
+        else:
+            newWord = nextWord(currentWord)
+        response.append(newWord)
         currentWord = newWord
         if newWord[-1] in "?!.":
             break
 
-    print(response)
+    print(" ".join(response))
