@@ -2,7 +2,6 @@ import pickle
 from collections import defaultdict
 
 from helpers import fileHelper
-from helpers import stringHelper
 
 textFile = fileHelper.selectFile("texts", "txt")
 text = []
@@ -11,23 +10,13 @@ for line in textFile:
         text.append(word)
 textFile.close()
 
-successors = {}
-
-# TODO: speed this bit up
-for word in list(set(text)):
-    word = word.lower()
-    working = []
-
-    for i in range(len(text) - 1):
-        if word == text[i].lower() and text[i][-1] not in "().?!":
-            working.append(stringHelper.remChars(str(text[i + 1]), "()"))
-
-    if len(working) > 0:
-        successors[word] = working
+successors = defaultdict(list)
+for i in range(len(text) - 1):
+    successors[text[i].lower()].append(text[i + 1])
 
 successorsFromPairs = defaultdict(list)
 for i in range(len(text) - 2):
-    successorsFromPairs[(text[i].lower(), text[i + 1].lower())].append(text[i+2])
+    successorsFromPairs[(text[i].lower(), text[i + 1].lower())].append(text[i + 2])
 
 outFile = open(textFile.name[:-4] + ".lex", "wb")
 pickle.dump((successors, successorsFromPairs), outFile, 2)
