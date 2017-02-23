@@ -4,16 +4,24 @@ import random
 import scorer
 from helpers import inputHelper
 
+# Bigger = better response and slower
+chains = 20000
 
 def getResponse(input):
-    input = input.split(" ")
+    input = input.strip().split(" ")
+    for i in range(len(input)):
+        input[i] = input[i].lower()
+    try:
+        question = input[-1][-1] == "?"
+    except:
+        question = False
+    scorer.processInput(input)
+
     bestResponse = ""
     bestScore = 0
 
-    for i in range(10000):
+    for i in range(chains):
         # noinspection PyRedeclaration
-        # currentWord = random.choice(input)
-        # currentWord = "My"
         currentWord = random.choice(["My", "The", "When", "I", "What"])
         response = [currentWord]
         while True:
@@ -25,12 +33,10 @@ def getResponse(input):
             currentWord = newWord
             if newWord[-1] in "?!.":
                 break
-        score = scorer.getScore(input, response)
-        if score > bestScore:
+        score = scorer.getScore(input, question, response)
+        if score >= bestScore:
             bestResponse = response
             bestScore = score
-        # if "name" in response:
-        #     print(str(score) + " ".join(response))
 
     print(bestScore)
     return bestResponse

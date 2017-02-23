@@ -21,7 +21,7 @@ def selectFile(path, extention, mode = "r"):
 
 def getChar(text, valid):
     while True:
-        userInput = input(text)
+        userInput = input(text).strip()
         if len(userInput) == 1 and userInput in valid:
             break
     return userInput
@@ -29,7 +29,7 @@ def getChar(text, valid):
 
 def getString(text):
     while True:
-        userInput = input(text)
+        userInput = input(text).strip()
         if len(userInput) > 0:
             break
     return userInput
